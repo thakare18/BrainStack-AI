@@ -1,0 +1,28 @@
+const ChatModel = require('../models/chat.model');
+
+async function createChat(req,res){
+    const { title } = req.body;
+    const user = req.user;
+
+
+    const chat = await ChatModel.create({
+        message: "Chat created successfully",
+        chat: {
+            _id : chat._id,
+            title : chat.title,
+            lastActivity : chat.lastActivity,}
+    });
+    res.status(201).json({
+        message: "Chat created successfully",
+        chat: {
+            _id : chat._id,
+            title : chat.title,
+            lastActivity : chat.lastActivity,
+            user: chat.user
+        }
+    });
+}
+
+module.exports = {
+    createChat
+};
