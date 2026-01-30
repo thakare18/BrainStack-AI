@@ -3,6 +3,10 @@ const cookie = require("cookie");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user.model");
 const {generateResponse} = require("../services/ai.service");
+const messageModel = require("../models/message.model");
+
+
+
 // socket io middleware for authentication
 function initSocketServer(httpServer){
     const io = new Server(httpServer,{})
@@ -35,11 +39,31 @@ function initSocketServer(httpServer){
 
     io.on("connection",(socket)=>{
         // console.log("New socket connected:", socket.id);
-
+2
         socket.on("ai-message", async (messagePayload) => {
             console.log("messagePayload received:", messagePayload)
 
-            const response = await generateResponse(messagePayload.content)
+            // Check if user is authenticated
+            if (!socket.user) {
+                socket.emit("error", { message: "Authentication required" });
+                return;
+            }
+
+            await messageModel.create({ // saving user message to database
+                chat : messagePayload.chat,
+                content : messagePayload.content,
+                user : socket.user._id,
+                role : "user"
+            })
+
+            const response = await aiService.generateResponse(messagePayload.content)
+
+             await messageModel.create({ // saving AI response in the database
+                chat : messagePayload.chat,
+                content : response,
+                user : socket.user._id,
+                role : "model"
+            })
 
             socket.emit("ai-response", {
                 content: response,
