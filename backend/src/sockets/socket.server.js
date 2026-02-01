@@ -64,14 +64,14 @@ function initSocketServer(httpServer){
                 chat : messagePayload.chat
             })
 
-            console.log("chat history:" , ChatHistory.map(item => {
+            
+
+            const response = await aiService.generateResponse(ChatHistory.map(item => {
                 return {
                    role : item.role,
                    parts : [{text: item.content }]
                 }
             }))
-
-            const response = await aiService.generateResponse(messagePayload.content)
 
              await messageModel.create({ // saving AI response in the database
                 chat : messagePayload.chat,
