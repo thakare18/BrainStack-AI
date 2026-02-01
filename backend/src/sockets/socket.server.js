@@ -43,6 +43,9 @@ function initSocketServer(httpServer){
         socket.on("ai-message", async (messagePayload) => {
             console.log("messagePayload received:", messagePayload)
 
+
+
+
             // Check if user is authenticated
             if (!socket.user) {
                 socket.emit("error", { message: "Authentication required" });
@@ -55,6 +58,18 @@ function initSocketServer(httpServer){
                 user : socket.user._id,
                 role : "user"
             })
+
+
+            const ChatHistory = await messageModel.find({
+                chat : messagePayload.chat
+            })
+
+            console.log("chat history:" , ChatHistory.map(item => {
+                return {
+                   role : item.role,
+                   parts : [{text: item.content }]
+                }
+            }))
 
             const response = await aiService.generateResponse(messagePayload.content)
 
