@@ -62,7 +62,7 @@ function initSocketServer(httpServer){
 
             const ChatHistory = await messageModel.find({
                 chat : messagePayload.chat
-            })
+            }).sort({createdAt : -1}).limit(20).lean().reverse()//20 most rrecent messages
 
             
 
