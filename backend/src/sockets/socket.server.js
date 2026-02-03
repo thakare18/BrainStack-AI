@@ -57,7 +57,15 @@ function initSocketServer(httpServer){
             const vectors = await aiService.generateVector(messagePayload.content)
              console.log("Generated vectors",vectors)  
 
-             
+             //memory retrieval functionality
+
+             const memory = await queryMemory({
+                queryVector: vectors,
+                limit: 3,
+                metadata: {}
+
+             })
+
              await createMemory({
                 vectors,
                 messageId : message._id,
@@ -67,7 +75,7 @@ function initSocketServer(httpServer){
                     text: messagePayload.content
                 }
              })
-
+                console.log("Retrieved memory:", memory)
 
             const ChatHistory = await messageModel.find({
                 chat : messagePayload.chat
@@ -116,3 +124,6 @@ function initSocketServer(httpServer){
 
 
 module.exports = initSocketServer;
+
+
+//  todays class we finish how to store memory in vector database and how to retrieve .
