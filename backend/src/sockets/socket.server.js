@@ -44,17 +44,12 @@ function initSocketServer(httpServer){
         socket.on("ai-message", async (messagePayload) => {
             console.log("messagePayload received:", messagePayload)
 
-
-
-
-            
-
-            // await messageModel.create({ // saving user message to database
-            //     chat : messagePayload.chat,
-            //     content : messagePayload.content,
-            //     user : socket.user._id,
-            //     role : "user"
-            // })
+           const message =  await messageModel.create({ // saving user message to database
+                chat : messagePayload.chat,
+                content : messagePayload.content,
+                user : socket.user._id,
+                role : "user"
+            })
 
 
            
@@ -62,9 +57,21 @@ function initSocketServer(httpServer){
             const vectors = await aiService.generateVector(messagePayload.content)
              console.log("Generated vectors",vectors)  
 
+             
+             await createMemory({
+                vectors,
+                messageId : message._id,
+                metadata: {
+                    chat: messagePayload.chat,
+                    user: socket.user.id,
+                    text: messagePayload.content
+                }
+             })
+
+
             const ChatHistory = await messageModel.find({
                 chat : messagePayload.chat
-            }).sort({createdAt : -1}).limit(20).lean().reverse()//20 most rrecent messages
+            }).sort({createdAt : -1}).limit(20).lean().reverse()//20 most recent messages
 
             
 
@@ -75,12 +82,26 @@ function initSocketServer(httpServer){
                 }
             }))
 
-            //  await messageModel.create({ // saving AI response in the database
-            //     chat : messagePayload.chat,
-            //     content : response,
-            //     user : socket.user._id,
-            //     role : "model"
-            // })
+           const responseMessage =   await messageModel.create({ // saving AI response in the database
+                chat : messagePayload.chat,
+                content : response,
+                user : socket.user._id,
+                role : "model"
+            })
+
+            const responseVectors = await aiService.generateVector(response)
+
+            await createMemory({
+                vectors : responseVectors,
+                messageId : responseMessage._id,
+                metadata : {
+                    chat : messagePayload.chat,
+                    user : socket.user.id,
+                    text : response
+                }
+            })
+
+
 
             socket.emit("ai-response", {
                 content: response,
