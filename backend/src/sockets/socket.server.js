@@ -44,19 +44,31 @@ function initSocketServer(httpServer){
         socket.on("ai-message", async (messagePayload) => {
             console.log("messagePayload received:", messagePayload)
 
-           const message =  await messageModel.create({ // saving user message to database
-                chat : messagePayload.chat,
-                content : messagePayload.content,
-                user : socket.user._id,
-                role : "user"
-            })
+        //    const message =  await messageModel.create({ // saving user message to database
+        //         chat : messagePayload.chat,
+        //         content : messagePayload.content,
+        //         user : socket.user._id,
+        //         role : "user"
+        //     })
 
 
            
  
-            const vectors = await aiService.generateVector(messagePayload.content)
-             console.log("Generated vectors",vectors)  
+        //     const vectors = await aiService.generateVector(messagePayload.content)
 
+                    const [message, vectors] = await Promise.all([ // promise.all is used to run multiple asynchronous operations in parallel
+                        messageModel.create({
+                            chat : messagePayload.chat,
+                            user : socket.user._id,
+                            content : messagePaylaad.content,
+                            role : "user"
+                        }),
+                        aiService.generateVector(messagePayload.content)
+                    ])
+
+        //      console.log("Generated vectors",vectors)  
+
+        // optimization for message save in db and vector generation we can do parallely using promise.all
              //memory retrieval functionality
 
              const memory = await queryMemory({
