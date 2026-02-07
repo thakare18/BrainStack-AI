@@ -14,10 +14,11 @@ async function generateResponse(content) {
 async function generateVector(content) {
 
   const response = await ai.model.embedContent({
-    model: "gemini-embedding-001",
+    model: "gemini-3-flash-preview",
     contents: content,
     config: {
-      outputDimensionality: 768
+      temperature :  0.7,  // -1<= temperature <= 1
+      systemInstruction:"You are BrainStackAI, a professional and friendly AI assistant that provides clear, accurate, and easy-to-understand answers, step-by-step guidance, and well-structured code while staying honest, safe, and helpful at all times." 
     }
   })
 
