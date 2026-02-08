@@ -10,9 +10,9 @@ const brainstackaiIndex = pc.Index("brainstackai");
 
 async function createMemory(vectors,metadata,messageId){
     await brainstackaiIndex.upsert({
-        id : messageId,
-        values : vectors,
-        metadata : metadata
+        id: messageId,
+        values: vectors,
+        metadata: metadata
     })
 }
 
@@ -20,7 +20,7 @@ async function createMemory(vectors,metadata,messageId){
 async function queryMemory({queryVector,limit = 5, metadata}){ // limit for number of results 
     const data = await brainstackaiIndex.query({
         vector: queryVector,
-        topk: limit, // limit number of results
+        topK: limit, // limit number of results
         filter: metadata ? metadata : undefined,
         includeMetadata: true
     })
