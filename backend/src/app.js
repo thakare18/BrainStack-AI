@@ -10,7 +10,12 @@ const chatRoutes = require("./routes/chat.routes");
 //middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(
+    {
+        origin: "http://localhost:5173",
+        credentials: true
+    }
+));
 
 //using routes
 app.use("/api/auth", authRoutes);
