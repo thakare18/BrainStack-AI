@@ -311,16 +311,7 @@ disconnect                   # Client disconnects
 
 ## 📸 Screenshots
 
-*Add screenshots of your application here to showcase the UI/UX*
-
-### Chat Interface
-![Chat Interface](docs/screenshots/chat.png)
-
-### Authentication
-![Login Page](docs/screenshots/login.png)
-
-### Dark Mode
-![Dark Mode](docs/screenshots/dark-mode.png)
+> 📝 **Note**: Screenshots will be added soon to showcase the application's user interface and features. Check back later for visual demonstrations of the chat interface, authentication pages, and theme toggle functionality.
 
 ---
 
@@ -341,13 +332,15 @@ disconnect                   # Client disconnects
 
 ## 👨‍💻 Developer
 
-**Your Name**  
+> 👤 **Developer Information**: Please customize this section with your personal information
+
+**[Your Name]**  
 Full Stack Developer | AI Enthusiast
 
-- 🌐 Portfolio: [yourportfolio.com](https://yourportfolio.com)
-- 💼 LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+- 🌐 Portfolio: [Add your portfolio link]
+- 💼 LinkedIn: [Add your LinkedIn profile]
 - 🐙 GitHub: [@thakare18](https://github.com/thakare18)
-- 📧 Email: your.email@example.com
+- 📧 Email: [Add your email address]
 
 ---
 
