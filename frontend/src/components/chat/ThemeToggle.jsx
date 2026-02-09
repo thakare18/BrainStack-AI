@@ -21,7 +21,7 @@ const ThemeToggle = () => {
       className="theme-toggle"
       aria-label={theme === 'light' ? 'Activate dark mode' : 'Activate light mode'}
     >
-      {theme === 'light' ? '🌙' : '☀️'}
+      {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
     </button>
   );
 };
