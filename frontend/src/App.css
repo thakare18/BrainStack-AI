@@ -1,55 +1,26 @@
-/* CSS Reset */
+/* Basic CSS Boilerplate */
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Root variables (optional) */
-:root {
-    --primary-color: #3498db;
-    --secondary-color: #2ecc71;
-    --text-color: #333;
-    --bg-color: #070606;
-    --font-main: Arial, sans-serif;
-}
-
-/* Body base style */
 body {
-    font-family: var(--font-main);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
 }
 
-/* Images */
 img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+  max-width: 100%;
+  display: block;
 }
 
-/* Links */
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
-/* Lists */
 ul, ol {
-    list-style: none;
-}
-
-/* Buttons */
-button {
-    font-family: inherit;
-    border: none;
-    cursor: pointer;
-}
-
-/* Container */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
+  list-style: none;
 }
