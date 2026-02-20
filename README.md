@@ -230,6 +230,6 @@ Endpoints include:
 * Get Messages
 
 ---
-**Prathamesh Vinayak Thakare**
+**Prathamesh Thakare**
 
 
