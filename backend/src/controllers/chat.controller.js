@@ -32,6 +32,51 @@ async function createChat(req, res) {
 }
 
 
+// Create a new message in a chat
+async function createMessage(req, res) {
+    try {
+        const { chatId, content } = req.body;
+        const user = req.user;
+
+        if (!chatId || !content) {
+            return res.status(400).json({
+                message: "chatId and content are required"
+            });
+        }
+
+        const message = await MessageModel.create({
+            chat: chatId,
+            user: user._id,
+            content,
+            role: "user"
+        });
+
+        await ChatModel.findByIdAndUpdate(chatId, {
+            lastActivity: new Date()
+        });
+
+        res.status(201).json({
+            message: "Message created successfully",
+            chatMessage: {
+                _id: message._id,
+                chat: message.chat,
+                user: message.user,
+                content: message.content,
+                role: message.role,
+                createdAt: message.createdAt,
+                updatedAt: message.updatedAt
+            }
+        });
+    } catch (error) {
+        console.error("Create message error:", error);
+        res.status(500).json({
+            message: "Error creating message",
+            error: error.message
+        });
+    }
+}
+
+
 // Get all chats of logged-in user
 async function getChats(req, res) {
     try {
@@ -83,6 +128,7 @@ async function getMessages(req, res) {
 
 module.exports = {
     createChat,
+    createMessage,
     getChats,
     getMessages
 };
