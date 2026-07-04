@@ -8,7 +8,6 @@
 ![React](https://img.shields.io/badge/Frontend-React-blue)
 ![Vite](https://img.shields.io/badge/Build-Vite-purple)
 ![Socket.io](https://img.shields.io/badge/Realtime-Socket.io-black)
-![Status](https://img.shields.io/badge/Status-Under%20Development-yellow)
 
 BrainStack-AI is a **full-stack AI chat application** that remembers conversations using **vector memory** and generates **context-aware responses**.
 It simulates a **persistent intelligent assistant** similar to modern AI platforms.
