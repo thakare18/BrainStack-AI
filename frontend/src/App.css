@@ -1,14 +1,19 @@
-/* Basic CSS Boilerplate */
-
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: var(--font-sans);
   line-height: 1.5;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 img {
@@ -21,6 +26,15 @@ a {
   color: inherit;
 }
 
-ul, ol {
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+ul,
+ol {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
