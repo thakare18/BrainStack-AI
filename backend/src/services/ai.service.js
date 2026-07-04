@@ -1,13 +1,23 @@
 const { GoogleGenAI } = require("@google/genai")
 
 
-const ai = new GoogleGenAI({})
+const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY
+})
+
+
+function ensureApiKey() {
+    if (!process.env.GEMINI_API_KEY) {
+        throw new Error("Missing GEMINI_API_KEY in backend/.env")
+    }
+}
 
 
 async function generateResponse(content) {
+    ensureApiKey();
 
     const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.5-flash-lite",
         contents: content,
         config: {
             temperature: 0.7,
@@ -40,6 +50,7 @@ async function generateResponse(content) {
 }
 
 async function generateVector(content) {
+    ensureApiKey();
 
     const response = await ai.models.embedContent({
         model: "gemini-embedding-001",
