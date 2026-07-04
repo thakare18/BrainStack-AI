@@ -18,24 +18,22 @@ const Login = () => {
         e.preventDefault();
         setSubmitting(true);
 
-
-        console.log(form);
-
-        axios.post("http://localhost/api/auth/login", {
-            email: form.email,
-            password: form.password
-        },
+        try {
+            await axios.post("http://localhost:3000/api/auth/login", {
+                email: form.email,
+                password: form.password
+            },
             {
                 withCredentials: true
             }
-        ).then((res) => {
-            console.log(res);
+        );
+
             navigate("/");
-        }).catch((err) => {
+        } catch (err) {
             console.error(err);
-        }).finally(() => {
+        } finally {
             setSubmitting(false);
-        });
+        }
 
     }
 
