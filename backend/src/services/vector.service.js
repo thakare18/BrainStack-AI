@@ -2,17 +2,28 @@
 const { Pinecone } =require("@pinecone-database/pinecone");
 
 // Initialize a Pinecone client with your API key
-const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
+const apiKey = process.env.PINECONE_API_KEY;
+const indexName = process.env.PINECONE_INDEX_NAME || "brainstackai";
+
+const pc = new Pinecone({ apiKey });
 
 // Create or connect to an index name : brainstackai
 
-const brainstackaiIndex = pc.Index("brainstackai");
+const brainstackaiIndex = pc.index(indexName);
 
-async function createMemory(vectors,metadata,messageId){
+async function createMemory({ vectors, metadata, messageId }){
+    if (!Array.isArray(vectors) || vectors.length === 0) {
+        throw new Error("Cannot upsert memory: embedding vector is empty or missing")
+    }
+
     await brainstackaiIndex.upsert({
-        id: messageId,
-        values: vectors,
-        metadata: metadata
+        records: [
+            {
+                id: messageId,
+                values: vectors,
+                metadata: metadata
+            }
+        ]
     })
 }
 
