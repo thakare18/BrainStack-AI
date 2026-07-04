@@ -119,20 +119,39 @@ const Home = () => {
 
     setIsSending(true);
 
-    const newMessages = [ ...messages, {
-      type: 'user',
-      content: trimmed
-    } ];
+    try {
+      const response = await axios.post('http://localhost:3000/api/chat/messages', {
+        chatId: activeChatId,
+        content: trimmed
+      }, {
+        withCredentials: true
+      });
 
-    console.log('New messages:', newMessages);
+      const savedMessage = response.data.chatMessage;
 
-    setMessages(newMessages);
-    setInput('');
+      setMessages(prevMessages => [ ...prevMessages, {
+        type: 'user',
+        content: savedMessage.content
+      } ]);
+      setInput('');
 
-    socket.emit('ai-message', {
-      chat: activeChatId,
-      content: trimmed
-    })
+      socket.emit('ai-message', {
+        chat: activeChatId,
+        content: trimmed
+      });
+    } catch (error) {
+      const status = error?.response?.status;
+
+      if (status === 401) {
+        navigate('/login');
+        setIsSending(false);
+        return;
+      }
+
+      console.error('Failed to save message:', error);
+      alert(error?.response?.data?.message || 'Could not save message. Please try again.');
+      setIsSending(false);
+    }
 
     // try {
     //   const reply = await fakeAIReply(trimmed);

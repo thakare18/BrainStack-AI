@@ -47,30 +47,36 @@ function initSocketServer(httpServer) {
             try {
                 console.log("messagePayload received:", messagePayload);
 
-                // optimization for message save in db and vector generation
-                // we can do parallely using promise.all
-                const [message, vectors] = await Promise.all([
-                    messageModel.create({
-                        chat: messagePayload.chat,
-                        user: socket.user._id,
-                        content: messagePayload.content,
-                        role: "user"
-                    }),
-                    aiService.generateVector(messagePayload.content)
-                ]);
+                const message = await messageModel.create({
+                    chat: messagePayload.chat,
+                    user: socket.user._id,
+                    content: messagePayload.content,
+                    role: "user"
+                });
+                console.log("Saved user message to MongoDB:", message._id.toString());
+
+                let vectors = [];
 
                 try {
-                    await createMemory({
-                        vectors,
-                        messageId: message._id,
-                        metadata: {
-                            chat: messagePayload.chat,
-                            user: socket.user._id,
-                            text: messagePayload.content
-                        }
-                    });
-                } catch (memoryError) {
-                    console.error("Failed to store user memory in Pinecone:", memoryError);
+                    vectors = await aiService.generateVector(messagePayload.content);
+                } catch (vectorError) {
+                    console.error("Failed to generate embedding for user message:", vectorError);
+                }
+
+                if (vectors.length > 0) {
+                    try {
+                        await createMemory({
+                            vectors,
+                            messageId: message._id,
+                            metadata: {
+                                chat: messagePayload.chat,
+                                user: socket.user._id,
+                                text: messagePayload.content
+                            }
+                        });
+                    } catch (memoryError) {
+                        console.error("Failed to store user memory in Pinecone:", memoryError);
+                    }
                 }
 
                 // memory retrieval functionality
@@ -121,30 +127,36 @@ function initSocketServer(httpServer) {
                     chat: messagePayload.chat
                 });
 
-                // optimization for response message save in db and vector generation
-                // we can do parallely using promise.all
-                const [responseMessage, responseVectors] = await Promise.all([
-                    messageModel.create({
-                        chat: messagePayload.chat,
-                        user: socket.user._id,
-                        content: response,
-                        role: "model"
-                    }),
-                    aiService.generateVector(response)
-                ]);
+                const responseMessage = await messageModel.create({
+                    chat: messagePayload.chat,
+                    user: socket.user._id,
+                    content: response,
+                    role: "model"
+                });
+                console.log("Saved AI message to MongoDB:", responseMessage._id.toString());
+
+                let responseVectors = [];
 
                 try {
-                    await createMemory({
-                        vectors: responseVectors,
-                        messageId: responseMessage._id,
-                        metadata: {
-                            chat: messagePayload.chat,
-                            user: socket.user._id,
-                            text: response
-                        }
-                    });
-                } catch (memoryError) {
-                    console.error("Failed to store model memory in Pinecone:", memoryError);
+                    responseVectors = await aiService.generateVector(response);
+                } catch (vectorError) {
+                    console.error("Failed to generate embedding for AI response:", vectorError);
+                }
+
+                if (responseVectors.length > 0) {
+                    try {
+                        await createMemory({
+                            vectors: responseVectors,
+                            messageId: responseMessage._id,
+                            metadata: {
+                                chat: messagePayload.chat,
+                                user: socket.user._id,
+                                text: response
+                            }
+                        });
+                    } catch (memoryError) {
+                        console.error("Failed to store model memory in Pinecone:", memoryError);
+                    }
                 }
             } catch (error) {
                 console.error("AI message handling failed:", error);
