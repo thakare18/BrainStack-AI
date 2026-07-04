@@ -100,52 +100,89 @@ User
 ---
 
 ## Project Structure
-
 ```
 BrainStack-AI/
 │
 ├── backend/
 │   ├── src/
 │   │   ├── controllers/
+│   │   │   ├── auth.controller.js
+│   │   │   └── chat.controller.js
+│   │   │
 │   │   ├── db/
+│   │   │   └── db.js
+│   │   │
 │   │   ├── middlewares/
+│   │   │   └── auth.middleware.js
+│   │   │
 │   │   ├── models/
+│   │   │   ├── user.model.js
+│   │   │   ├── chat.model.js
+│   │   │   └── message.model.js
+│   │   │
 │   │   ├── routes/
+│   │   │   ├── auth.routes.js
+│   │   │   └── chat.routes.js
+│   │   │
 │   │   ├── services/
+│   │   │   ├── ai.service.js
+│   │   │   └── vector.service.js
+│   │   │
 │   │   ├── sockets/
+│   │   │   └── socket.server.js
+│   │   │
 │   │   └── app.js
 │   │
+│   ├── .env
 │   ├── server.js
-│   └── package.json
+│   ├── package.json
+│   └── package-lock.json
 │
 ├── frontend/
 │   ├── public/
+│   │
 │   ├── src/
+│   │   ├── assets/
+│   │   │
 │   │   ├── components/
 │   │   │   └── chat/
-│   │   │       
-│   │   │       
-│   │   │       
-│   │   │       
-│   │   │       
+│   │   │       ├── ChatComposer.jsx
+│   │   │       ├── ChatMessages.jsx
+│   │   │       ├── ChatSidebar.jsx
+│   │   │       ├── ChatMobileBar.jsx
+│   │   │       ├── ThemeToggle.jsx
+│   │   │       ├── ChatComposer.css
+│   │   │       ├── ChatLayout.css
+│   │   │       ├── ChatMessages.css
+│   │   │       ├── ChatSidebar.css
+│   │   │       └── ChatMobileBar.css
 │   │   │
 │   │   ├── pages/
-│   │   │   
-│   │   │   
-│   │   │   
+│   │   │   ├── Home.jsx
+│   │   │   ├── Login.jsx
+│   │   │   └── Register.jsx
+│   │   │
+│   │   ├── store/
 │   │   │
 │   │   ├── styles/
+│   │   │   └── theme.css
+│   │   │
 │   │   ├── App.jsx
 │   │   ├── AppRoutes.jsx
-│   │   └── main.jsx
+│   │   ├── main.jsx
+│   │   ├── App.css
+│   │   └── index.css
 │   │
-│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
 │   ├── vite.config.js
-│   └── package.json
+│   ├── eslint.config.js
+│   └── index.html
 │
-├── .postman/
+├── .gitignore
 ├── README.md
-└── .gitignore
+├── package.json
+└── package-lock.json
 ```
 
 ---
