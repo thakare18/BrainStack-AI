@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import ChatMobileBar from '../components/chat/ChatMobileBar.jsx';
@@ -15,7 +15,7 @@ const Home = () => {
   const [ input, setInput ] = useState('');
   const [ isSending, setIsSending ] = useState(false);
   const [ sidebarOpen, setSidebarOpen ] = useState(false);
-  const [ socket, setSocket ] = useState(null);
+  const socketRef = useRef(null);
 
   const [ messages, setMessages ] = useState([
     // {
@@ -27,6 +27,17 @@ const Home = () => {
     //   content: 'Hi there! I need assistance with my account.'
     // }
   ]);
+
+  const getMessages = useCallback(async (chatId) => {
+   const response = await axios.get(`http://localhost:3000/api/chat/messages/${chatId}`, { withCredentials: true })
+
+   console.log('Fetched messages:', response.data.messages);
+
+   setMessages(response.data.messages.map(m => ({
+     type: m.role === 'user' ? 'user' : 'ai',
+     content: m.content
+   })));
+  }, []);
 
   const handleNewChat = async () => {
     try {
@@ -102,19 +113,21 @@ const Home = () => {
       setIsSending(false);
     });
 
-    setSocket(tempSocket);
+    socketRef.current = tempSocket;
 
     return () => {
       mounted = false;
+      socketRef.current = null;
       tempSocket.disconnect();
     };
 
-  }, []);
+  }, [getMessages]);
 
   const sendMessage = async () => {
 
     const trimmed = input.trim();
     console.log('Sending message:', trimmed);
+    const socket = socketRef.current;
     if (!trimmed || !activeChatId || isSending || !socket) return;
 
     setIsSending(true);
@@ -163,20 +176,6 @@ const Home = () => {
     // }
   }
 
-  const getMessages = async (chatId) => {
-
-   const response = await axios.get(`http://localhost:3000/api/chat/messages/${chatId}`, { withCredentials: true })
-
-   console.log('Fetched messages:', response.data.messages);
-
-   setMessages(response.data.messages.map(m => ({
-     type: m.role === 'user' ? 'user' : 'ai',
-     content: m.content
-   })));
-
-  }
-
-
 return (
   <div className="chat-layout minimal">
     <ChatMobileBar
@@ -197,9 +196,9 @@ return (
     <main className="chat-main" role="main">
       {messages.length === 0 && (
         <div className="chat-welcome" aria-hidden="true">
-          <div className="chip">Early Preview</div>
-          <h1>ChatGPT Clone</h1>
-          <p>Ask anything. Paste text, brainstorm ideas, or get quick explanations. Your chats stay in the sidebar so you can pick up where you left off.</p>
+          <div className="chip">BrainStack AI</div>
+          <h1>Your AI memory workspace</h1>
+          <p>Ask anything, revisit old context, and continue conversations without starting over. BrainStack keeps your chats organized so the assistant can respond with memory.</p>
         </div>
       )}
       <ChatMessages messages={messages} isSending={isSending} />
