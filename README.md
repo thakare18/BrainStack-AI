@@ -25,12 +25,7 @@ Completed:
 * Vector memory integration
 * Context-aware AI responses
 * React frontend with theme toggle
-
-In progress:
-
 * UI polish
-* Deployment
-* Advanced features
 
 ---
 
